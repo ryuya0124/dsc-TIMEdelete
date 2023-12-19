@@ -27,7 +27,7 @@
 ## 二次配布について
 ・ご自由にどうぞ。
 
-## 制作者Twitter
+## 制作者X(Twitter)
 [@_ryuya_0124](https://twitter.com/_ryuya_0124)
 
 ## About this tool
@@ -56,5 +56,5 @@ in its entirety and pasting it in the Script Editor.
 ## Secondary distribution
 Secondary distribution is permitted.
 
-## Twitter of the creator
+## X(Twitter) of the creator
 [@_ryuya_0124](https://twitter.com/_ryuya_0124)
