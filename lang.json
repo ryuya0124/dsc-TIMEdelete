@@ -1,0 +1,20 @@
+{
+    "en": {
+        "input": "Input: {}",
+        "output": "Output: {}",
+        "completed": "Processing completed.",
+        "filepath": "Please Enter the file path:",
+        "file_not_found": "The specified file could not be found.",
+        "invalid_characters": "File Path contains invalid characters.",
+        "result_file_path": "Result file path: {}"
+    },
+    "ja": {
+        "input": "入力: {}",
+        "output": "出力: {}",
+        "completed": "処理が完了しました。",
+        "filepath": "ファイルへのパスを入力してください：",
+        "file_not_found": "指定されたファイルは見つかりませんでした。",
+        "invalid_characters": "ファイルパスに不正な文字が含まれています。",
+        "result_file_path": "出力ファイルパス: {}"
+    }
+}
