@@ -28,7 +28,7 @@
 ・ご自由にどうぞ。
 
 ## 制作者Twitter
-@_ryuya_0124
+@_ryuya_0124  
 
 ## About this tool
 This tool deletes unnecessary timestamp lines (TIME();) from dsc files used in Project DIVA.
