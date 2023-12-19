@@ -1,13 +1,13 @@
 # dsc-TIMEdelete
 
-##このツールについて
+## このツールについて
 ・Project DIVAで使われるdscファイルから
 　不要なタイムスタンプ行(TIME();)を削除するツールです。
 
 ・「TIME」から始まる行が2行以上連続で続いたときに
 　最も下のものだけを残して削除します。
 
-##使い方
+## 使い方
 ・Script Editorでdscファイルを読み込みます。
 
 ・Script Editor上でテキストを全文コピーして、
@@ -24,19 +24,19 @@
 ・Output.txtを全文コピーして、Script Editorでペーストすることで、
 　不要なタイムスタンプを削除することができます。
 
-##二次配布について
+## 二次配布について
 ・ご自由にどうぞ。
 
-##制作者Twitter
+## 制作者Twitter
 @_ryuya_0124
 
-##About this tool
+## About this tool
 This tool deletes unnecessary timestamp lines (TIME();) from dsc files used in Project DIVA.
 
 When two or more lines starting with "TIME" are followed in succession,
 　only the bottom one is left and deleted.
 
-##How to use
+## How to use
 Load a dsc file in the Script Editor.
 
 Copy the entire text in the Script Editor and save it in .txt format
@@ -53,8 +53,8 @@ When the process is successfully completed, a text file named "Output.txt"
 You can remove unnecessary timestamps by copying the Output.txt file
 　in its entirety and pasting it in the Script Editor.
 
-##Secondary distribution
+## Secondary distribution
 Secondary distribution is permitted.
 
-##Twitter of the creator
+## Twitter of the creator
 @_ryuya_0124
