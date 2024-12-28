@@ -55,6 +55,3 @@ in its entirety and pasting it in the Script Editor.
 
 ## Secondary distribution
 Secondary distribution is permitted.
-
-## X(Twitter) of the creator
-[@_ryuya_0124](https://twitter.com/_ryuya_0124)
