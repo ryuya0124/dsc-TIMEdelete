@@ -6,3 +6,5 @@ dist/
 *.spec
 Settings.ini
 Output.txt
+fastlane/README.md
+fastlane/report.xml
