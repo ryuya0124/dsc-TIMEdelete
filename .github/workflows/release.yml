@@ -32,11 +32,19 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Set up Python
+        if: runner.os != 'macOS'
         uses: actions/setup-python@v7
         with:
           python-version: '3.14'
           cache: pip
           cache-dependency-path: requirements-build.txt
+
+      - name: Set up Homebrew Python on macOS
+        if: runner.os == 'macOS'
+        run: |
+          brew install python@3.14
+          /opt/homebrew/bin/python3.14 -m venv .venv
+          echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
 
       - name: Install current PyInstaller
         if: runner.os != 'Windows'
