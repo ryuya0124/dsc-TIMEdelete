@@ -1,5 +1,14 @@
 # dsc-TIMEdelete
 
+[Releases](https://github.com/ryuya0124/dsc-TIMEdelete/releases)から利用環境に合うファイルをダウンロードしてください。
+全OS版ともインストール不要のポータブル配布です。Windows／Ubuntu版はアーカイブを展開して実行し、アンインストール時は展開したフォルダを削除してください。macOS版は署名・公証済みDMGを開き、`dsc-TIMEdelete.command`をダブルクリックして起動します。macOS版の設定と既定出力は`~/Documents/dsc-TIMEdelete`に保存され、アンインストール時はDMGと必要に応じてこのフォルダを削除します。
+
+| OS | 対応状況 |
+| --- | --- |
+| Windows 11 x64 | 対応（Windows Server 2025でビルド） |
+| Ubuntu latest x64 | 対応 |
+| macOS 26 Apple Silicon | 対応 |
+
 ## このツールについて
 ・Project DIVAで使われるdscファイルから  
 　不要なタイムスタンプ行(TIME();)を削除するツールです。
@@ -23,6 +32,12 @@
 
 ・Output.txtを全文コピーして、Script Editorでペーストすることで、  
 　不要なタイムスタンプを削除することができます。
+
+コマンドラインから入力・出力ファイルと言語を指定することもできます。
+
+```shell
+dsc-TIMEdelete input.txt --output Output.txt --language ja
+```
 
 ## 二次配布について
 ・ご自由にどうぞ。
@@ -52,6 +67,24 @@ will be generated in current directory.
 
 You can remove unnecessary timestamps by copying the Output.txt file  
 in its entirety and pasting it in the Script Editor.
+
+The input, output, and language can also be supplied on the command line:
+
+```shell
+dsc-TIMEdelete input.txt --output Output.txt --language en
+```
+
+## Build
+
+Python 3.14 is used for release builds.
+
+```shell
+python -m pip install -r requirements-build.txt
+python -m unittest discover -s tests -v
+python -m PyInstaller --clean --noconfirm --console --onedir --add-data "lang.json:." --name dsc-TIMEdelete dsc-TIMEdelete.py
+```
+
+Pushing a version tag builds and publishes Windows, Ubuntu, and Apple Silicon macOS archives through GitHub Actions. The macOS DMG is signed with the Developer ID Application certificate managed by fastlane match, notarized by Apple, and stapled. The Windows job compiles the PyInstaller 6.22.3 bootloader locally and uses `onedir` packaging to reduce antivirus false-positive risk; it cannot guarantee that every antivirus engine will accept every build.
 
 ## Secondary distribution
 Secondary distribution is permitted.

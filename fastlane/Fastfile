@@ -1,0 +1,86 @@
+require 'fileutils'
+
+default_platform(:mac)
+
+SIGNING_IDENTITY = 'Developer ID Application: ryuya watanabe (FZ35ZF3CZV)'
+PROJECT_ROOT = File.expand_path('..', __dir__)
+
+platform :mac do
+  desc 'Install the Developer ID certificate managed by match'
+  lane :setup_certificates do
+    if ENV['CI']
+      keychain_name = 'ci_keychain'
+      keychain_password = ENV.fetch('MATCH_PASSWORD')
+      keychain_path = File.expand_path("~/Library/Keychains/#{keychain_name}-db")
+
+      create_keychain(
+        name: keychain_name,
+        password: keychain_password,
+        default_keychain: true,
+        unlock: true,
+        timeout: 3600,
+        lock_when_sleeps: false,
+        add_to_search_list: true
+      )
+      match(
+        type: 'developer_id',
+        platform: 'macos',
+        readonly: true,
+        skip_provisioning_profiles: true,
+        keychain_name: keychain_name,
+        keychain_password: keychain_password
+      )
+      sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k '#{keychain_password}' '#{keychain_path}'")
+    else
+      match(type: 'developer_id', platform: 'macos', readonly: true, skip_provisioning_profiles: true)
+    end
+  end
+
+  desc 'Build and sign the Apple Silicon command-line application'
+  lane :build_signed do
+    Dir.chdir(PROJECT_ROOT) do
+      sh(
+        'python', '-m', 'PyInstaller',
+        '--clean', '--noconfirm', '--console', '--onedir',
+        '--target-arch', 'arm64',
+        '--add-data', 'lang.json:.',
+        '--codesign-identity', SIGNING_IDENTITY,
+        '--name', 'dsc-TIMEdelete',
+        'dsc-TIMEdelete.py'
+      )
+      sh('codesign', '--verify', '--strict', '--verbose=2', 'dist/dsc-TIMEdelete/dsc-TIMEdelete')
+    end
+  end
+
+  desc 'Notarize the signed command-line distribution'
+  lane :notarize_release do
+    Dir.chdir(PROJECT_ROOT) do
+      dmg_staging_path = File.expand_path('dist/dmg-staging')
+      dmg_path = File.expand_path('dist/dsc-TIMEdelete-macos-arm64.dmg')
+
+      FileUtils.rm_rf(dmg_staging_path)
+      FileUtils.mkdir_p(dmg_staging_path)
+      FileUtils.cp_r('dist/dsc-TIMEdelete', dmg_staging_path)
+      FileUtils.cp('packaging/dsc-TIMEdelete.command', dmg_staging_path)
+      FileUtils.chmod(0o755, File.join(dmg_staging_path, 'dsc-TIMEdelete.command'))
+      FileUtils.rm_f(dmg_path)
+      sh(
+        'hdiutil', 'create',
+        '-volname', 'dsc-TIMEdelete',
+        '-srcfolder', dmg_staging_path,
+        '-ov', '-format', 'UDZO',
+        dmg_path
+      )
+      sh(
+        'xcrun', 'notarytool', 'submit', dmg_path,
+        '--key', ENV.fetch('APPLE_API_KEY'),
+        '--key-id', ENV.fetch('APPLE_API_KEY_ID'),
+        '--issuer', ENV.fetch('APPLE_API_ISSUER'),
+        '--wait'
+      )
+      sh('xcrun', 'stapler', 'staple', dmg_path)
+      sh('xcrun', 'stapler', 'validate', dmg_path)
+      FileUtils.rm_rf(dmg_staging_path)
+    end
+  end
+end
