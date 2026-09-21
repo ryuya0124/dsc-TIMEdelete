@@ -48,6 +48,15 @@ platform :mac do
         '--name', 'dsc-TIMEdelete',
         'dsc-TIMEdelete.py'
       )
+      Dir.glob('dist/dsc-TIMEdelete/**/*.framework').sort.reverse_each do |framework|
+        sh(
+          'codesign', '--force', '--deep',
+          '--options', 'runtime', '--timestamp',
+          '--sign', SIGNING_IDENTITY,
+          framework
+        )
+        sh('codesign', '--verify', '--deep', '--strict', '--verbose=2', framework)
+      end
       sh('codesign', '--verify', '--strict', '--verbose=2', 'dist/dsc-TIMEdelete/dsc-TIMEdelete')
     end
   end
